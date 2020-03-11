@@ -1,0 +1,23 @@
+{
+  "name": "classification-model-backend",
+  "version": "1.0.0",
+  "description": "This is the backend to the Classification Project for CSC 180.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://polymorphik@github.com/Sigmoid-Frontsquat-LLC/classification-model-backend.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Sigmoid-Frontsquat-LLC/classification-model-backend/issues"
+  },
+  "homepage": "https://github.com/Sigmoid-Frontsquat-LLC/classification-model-backend#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "joi": "^14.3.1"
+  }
+}

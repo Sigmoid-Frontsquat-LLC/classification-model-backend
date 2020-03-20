@@ -78,7 +78,12 @@ app.get("/classify", (req, res) => {
         // get the result...
         // send back the result...
     } else {
-        res.status(400).end(validatation.error.message);
+        const response = {
+            error: validatation.error.message,
+            code: 400
+        };
+
+        res.status(response.code).end(JSON.stringify(response));
     }
 });
 

@@ -82,6 +82,6 @@ app.get("/classify", (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`Listening on port ${port}`);
+app.listen(port, async () => {
+    console.log(`Hostname ${await require("public-ip").v4()} on port ${port}`);
 });

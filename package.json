@@ -17,8 +17,8 @@
   },
   "homepage": "https://github.com/Sigmoid-Frontsquat-LLC/classification-model-backend#readme",
   "dependencies": {
-    "express": "^4.17.1",
-    "joi": "^14.3.1",
-    "public-ip": "^4.0.0"
+    "express": "4.17.1",
+    "joi": "14.3.1",
+    "public-ip": "4.0.0"
   }
 }

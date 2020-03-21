@@ -21,6 +21,19 @@ import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 
 
+# airplane : 0
+# automobile : 1
+# bird : 2
+# cat : 3
+# deer : 4
+# dog : 5
+# frog : 6
+# horse : 7
+# ship : 8
+# truck : 9
+
+class_labels = ['airplane','automobile','bird','cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+
 
 
 
@@ -104,7 +117,7 @@ print("Hello, World!")
 # my image is 224,224,4 so i will use that dimension for now
 # no idea why its 4..
 num_classes = 10
-input_shape = (224,224,3)
+input_shape = (32,32,3)
 
 
 
@@ -189,8 +202,27 @@ pass
 pass
 
 # Load weights based on activator and optimizer
+# train weights for different modelo combos 
 
 # Preprocess the image information
+# LANCZOS is some type of smoothing interpolation technique for resampling
+source = 'datcat.jpg'
+img = Image.open(source)
+img.load()
+img = img.resize((32,32),Image.LANCZOS)
+img.load()
+
+img_array = np.asarray(img)
+img_array = img_array.reshape(32,32,3)
+
+
+prediction = modelo.predict(img_array)
+print(prediction)
+
+
+
+
+
 
 # Get the classification
 

@@ -7,6 +7,7 @@ import os
 import shutil
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
+from skimage.transform import resize
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Activation, Conv2D, MaxPooling2D, Dropout, Flatten
@@ -103,12 +104,15 @@ if len(activator) == 0 or len(optimizer) == 0 or len(source) or 0:
 source = 'datcat.jpg'
 img = Image.open(source)
 img_array = np.asarray(img)
-input_shape = img_array.shape
+img_array = resize(img_array,(32,32,3),anti_aliasing=True)
+input_shape = (32,32,3)
+# input_shape = img_array.shape
 
 # reshape for model
-img_array = img_array.reshape((1,img_array.shape[0],img_array.shape[1],img_array.shape[3]))
+# original model was trained with (32,32,3) 
+# img_array = img_array.reshape((1,img_array.shape[0],img_array.shape[1],img_array.shape[3]))
 
-
+img_array = img_array.reshape((1,32,32,3))
 
 
 
@@ -160,6 +164,8 @@ pass
 
 # Load weights based on activator and optimizer
 # probably not needed as we are already passing the optimizer as a variable 
+modelo.compile(loss='categorical_crossentropy',optimizer=optimizer)
+
 if optimizer == 'adam':
     # compile with adam 
     modelo.compile(loss='categorical_crossentropy',optimizer=optimizer)

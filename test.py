@@ -20,7 +20,11 @@ class_labels = ['airplane','automobile','bird','cat', 'deer', 'dog', 'frog', 'ho
 img = Image.open('datcat.jpg')
 img_array = np.asarray(img)
 
-input_shape = img_array.shape
+
+# input_shape is 32,32,3 because thats what the original model was trained on .... 
+input_shape = (32,32,3)
+
+# downsampling to get image to same input size as model
 img_array = resize(img_array,input_shape,anti_aliasing=True)
 img_array = img_array.reshape((1,img_array.shape[0],img_array.shape[1],img_array.shape[2]))
 
@@ -55,7 +59,7 @@ modelo_ar.load_weights('relu-adam.hdf5')
 
 
 # prediction
-# pred = modelo_ar.predict(img_array)
+pred = modelo_ar.predict(img_array)
 # pred = np.argmax(pred)
 # pred = class_labels[pred]
 # print('Prediction:{}'.format(pred))

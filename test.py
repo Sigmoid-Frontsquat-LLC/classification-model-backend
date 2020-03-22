@@ -55,7 +55,9 @@ modelo_ar.load_weights('relu-adam.hdf5')
 
 
 # prediction
-pred = modelo_ar.predict(img_array)
-pred = np.argmax(pred)
-pred = class_labels[pred]
-print('Prediction:{}'.format(pred))
+# pred = modelo_ar.predict(img_array)
+# pred = np.argmax(pred)
+# pred = class_labels[pred]
+# print('Prediction:{}'.format(pred))
+
+print(img_array.shape)

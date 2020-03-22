@@ -33,7 +33,8 @@ import matplotlib.pyplot as plt
 # truck : 9
 
 class_labels = ['airplane','automobile','bird','cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
-
+num_classes = 10
+# input_shape = (32,32,3)
 
 
 
@@ -96,58 +97,28 @@ else:
 if len(activator) == 0 or len(optimizer) == 0 or len(source) or 0:
     raise ValueError("Usage: -source [-a activator] [-o optimizer]")
 
-print("Hello, World!")
-## each argument has been passed in, however
-## we need to make sure they are valid.
 
 
-#########################
-# austinwilson
-# robertocampos
-# kevinpacheco
-#
-#
-# this is my code buddy 
+# Image preprocessing
+source = 'datcat.jpg'
+img = Image.open(source)
+img_array = np.asarray(img)
+input_shape = img_array.shape
 
-
-
-
-## basic model with terrible f1... 
-# fix later just try to get simple version working 
-# my image is 224,224,4 so i will use that dimension for now
-# no idea why its 4..
-num_classes = 10
-input_shape = (32,32,3)
+# reshape for model
+img_array = img_array.reshape((1,img_array.shape[0],img_array.shape[1],img_array.shape[3]))
 
 
 
 
 
 
-model = Sequential()
-# was initially 32 kernel_size=(4,4)
-# number of filters is 32
-model.add(Conv2D(32,kernel_size=(3,3),strides = (1,1), padding='valid',
-                activation = 'sigmoid',
-                input_shape = input_shape))
-model.add(MaxPooling2D(pool_size=(2,2),strides=(2,2)))
-model.add(Dropout(.25))
-model.add(Flatten())
-model.add(Dense(num_classes,activation='softmax'))
-
-
-# need pre trained weights 
-# model.compile(loss='categorical_crossentropy',optimizer='adam')
-# model.load_weights('best_weights.hdf5')
 
 
 
-
-## robertos modelo
-# input_shape=(32, 32, 3)
 
 modelo = Sequential()
-modelo.add(Conv2D(32, (3, 3), activation=activator, padding='same', input_shape=(32, 32, 3)))
+modelo.add(Conv2D(32, (3, 3), activation=activator, padding='same', input_shape=input_shape))
 modelo.add(Conv2D(32, (3, 3), activation=activator, padding='same'))
 modelo.add(Conv2D(32, (3, 3), activation=activator, padding='same'))
 modelo.add(MaxPooling2D((2, 2)))
@@ -172,19 +143,6 @@ modelo.load_weights('best_weights.hdf5')
 
 
 
-## this is for transfer learning model
-
-
-vgg_model = VGG16(weights='imagenet', include_top=False, input_shape=(64, 64, 3))   #  first hidden layer
-
- 
-# write your code here
-model = Sequential()
-for layer in vgg_model.layers:
-  model.add(layer)
-
-for layer in model.layers:
-  layer.trainable = False
 
 
 
@@ -194,7 +152,6 @@ for layer in model.layers:
 
 
 
-######################### not sure here
 
 # validate the 'activator'
 pass
@@ -202,28 +159,41 @@ pass
 pass
 
 # Load weights based on activator and optimizer
-# train weights for different modelo combos 
+# probably not needed as we are already passing the optimizer as a variable 
+if optimizer == 'adam':
+    # compile with adam 
+    modelo.compile(loss='categorical_crossentropy',optimizer=optimizer)
 
-# Preprocess the image information
-# LANCZOS is some type of smoothing interpolation technique for resampling
-source = 'datcat.jpg'
-img = Image.open(source)
-img.load()
-img = img.resize((32,32),Image.LANCZOS)
-img.load()
+    # activator 
+    if activator == 'relu':
+        # load adam-relu
+        modelo.load_weights('dnn/relu-adam.hdf5')
+    elif activator == 'sigmoid':
+        # load sigmoid-adam
+        modelo.load_weights('dnn/sigmoid-adam.hdf5')
+    elif activator == 'tanh':
+        # load tanh-adam
+        modelo.load_weights('tanh-adam.hdf5')
+    else:
+        print('error')
+elif optimizer == 'sgd':
+    # compile with sgd
+    if activator == 'relu':
+        # load relu-sgd
+        modelo.load_weights('relu-sgd.hdf5')
+    elif activator == 'sigmoid':
+        # load sigmoid-sgd
+        modelo.load_weights('sigmoid-sgd.hdf5')
+    elif activator == 'tanh':
+        # load tanh-sgd
+        modelo.load_weights('tanh-sgd.hdf5')
 
-img_array = np.asarray(img)
-img_array = img_array.reshape(32,32,3)
-
-
-prediction = modelo.predict(img_array)
-print(prediction)
-
-
-
-
-
+else: 
+    print('error')
 
 # Get the classification
 
+# pred = modeo.predict()
+
 # Print out the classification
+print('dats a cat gro')

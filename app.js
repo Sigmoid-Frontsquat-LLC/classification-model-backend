@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const Joi = require("joi");
 const os = require("os");
+const fs = require("fs");
 
 const port = process.env.PORT | 9000;
 
@@ -30,20 +31,29 @@ app.post("/classify", (req, res) => {
         image: Joi.string().optional()
     };
 
-    console.log("classify");
-
     const validatation = Joi.validate(req.body, scheme);
-
-    console.log("JOI Validation Complete");
 
     res.setHeader("content-type", "application/json");
 
     if (validatation.error === undefined || validatation.error === null) {
+        let buffer = Buffer.from(req.body.image, "base64");
+
+        const hash = require("crypto")
+            .createHash("md5")
+            .update(Date.now().toString())
+            .digest("hex");
+
+        const path = "temp/" + hash + ".jpg";
+
+        fs.writeFileSync(path, buffer);
+
         // run python code here...
         const spawn = require("child_process").spawn;
 
         const process = spawn("python3", [
             "./classification.py",
+            "-s",
+            path,
             "-a",
             req.body.activation,
             "-o",
@@ -64,6 +74,8 @@ app.post("/classify", (req, res) => {
             result.output = error;
             result.code = 400;
 
+            fs.unlinkSync(path);
+
             res.status(400).end(JSON.stringify(result));
         });
 
@@ -79,6 +91,8 @@ app.post("/classify", (req, res) => {
             // process the output.
             result.output = output;
             result.code = 200;
+
+            fs.unlinkSync(path);
 
             res.status(result.code).end(JSON.stringify(result));
         });

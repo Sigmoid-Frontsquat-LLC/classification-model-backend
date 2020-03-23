@@ -56,6 +56,12 @@ else:
 if len(activator) == 0 or len(optimizer) == 0 or len(source) == 0 :
     raise ValueError("Usage: [-s image] [-a activator] [-o optimizer]")
 
+print('Source: ' + source)
+print('Activator: ' + activator)
+print('Optimizer: ' + optimizer)
+
+exit(0)
+
 ############# Classification Logic ##################
 
 import pandas as pd

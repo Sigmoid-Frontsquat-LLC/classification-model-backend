@@ -30,13 +30,15 @@ else:
     # could this be done better?
     # sure, but this works for now...
     for i in range(1, len(sys.argv) - 1):
+
         flag = sys.argv[i]
         value = sys.argv[i + 1]
 
         isActivator, act = parse_activator(flag, value)
 
         if isActivator:
-            activator = act
+            if act != '-o':
+                activator = act
             continue
 
         isOptimizer, opt = parse_optimizer(flag, value)
@@ -101,7 +103,7 @@ num_classes = 10
 # input_shape = (32,32,3)
 
 # Image preprocessing
-source = 'datcat.jpg'
+# source = 'datcat.jpg'
 img = Image.open(source)
 img = img.resize((32, 32))
 img_array = np.asarray(img)
@@ -172,20 +174,37 @@ elif optimizer == 'sgd':
         modelo.load_weights('dnn/relu-sgd2.hdf5')
     elif activator == 'sigmoid':
         # load sigmoid-sgd
-        modelo.load_weights('dnn/sigmoid-sgd.hdf5')
+        modelo.load_weights('dnn/sigmoid-sgd2.hdf5')
     elif activator == 'tanh':
         # load tanh-sgd
-        modelo.load_weights('dnn/tanh-sgd.hdf5')
+        modelo.load_weights('dnn/tanh-sgd2.hdf5')
 
 else: 
     print('error')
 
 # Get the classification
 
+
+
+
 pred = modelo.predict(img_array)
-pred = np.argmax(pred)
-pred = class_labels[pred]
+# print(pred[0])
+# print(pred)
+# pred = np.argmax(pred)
+# pred = class_labels[pred]
 # print(pred)
 
 # Print out the classification
-print('dats a ',pred)
+
+# x = dict(zip(class_labels, pred))
+
+
+classification = {k:v for k,v in zip(class_labels,pred[0])}
+print(classification)
+print('\n\n\n')
+pred_class = class_labels[np.argmax(pred)]
+print('dats a ',pred_class)
+
+
+
+

@@ -106,6 +106,7 @@ num_classes = 10
 # source = 'datcat.jpg'
 img = Image.open(source)
 img = img.resize((32, 32))
+img.save('resized.jpg')
 img_array = np.asarray(img)
 img_array = img_array / 255
 input_shape = (32,32,3) 

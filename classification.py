@@ -80,7 +80,7 @@ from tensorflow.keras.layers import Dense, Activation, Conv2D, MaxPooling2D, Dro
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.applications.vgg16 import VGG16
-from PIL import Image, ImageFile
+from PIL import Image, ImageFile, ImageEnhance
 from matplotlib.pyplot import imshow
 import requests
 from io import BytesIO
@@ -105,11 +105,29 @@ num_classes = 10
 # Image preprocessing
 # source = 'datcat.jpg'
 img = Image.open(source)
-img = img.resize((32, 32),filter=Image.ANTIALIAS)
-img.save('resized.jpg')
-img_array = np.asarray(img)
+img = img.resize((32,32))
+enhancer = ImageEnhance.Sharpness(img)
+enhanced_im = enhancer.enhance(10.0)
+
+
+enhanced_im.save('resized.jpg')
+img_array = np.asarray(enhanced_im)
 img_array = img_array / 255
-input_shape = (32,32,3) 
+print(img_array.shape)
+
+
+input_shape = (32,32,3)
+
+# img.save('resized.jpg')
+# img_array = np.asarray(img)
+# img_array = img_array / 255
+# input_shape = (32,32,3) 
+
+
+
+
+
+
 # input_shape = img_array.shape
 
 # reshape for model
@@ -199,6 +217,16 @@ pred = modelo.predict(img_array)
 
 # x = dict(zip(class_labels, pred))
 
+
+
+
+
+
+
+
+
+
+############# worked before ##############
 
 classification = {k:v for k,v in zip(class_labels,pred[0])}
 print(classification)

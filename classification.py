@@ -158,23 +158,24 @@ if optimizer == 'adam':
         modelo.load_weights('dnn/relu-adam2.hdf5')
     elif activator == 'sigmoid':
         # load sigmoid-adam
-        modelo.load_weights('dnn/sigmoid-adam.hdf5')
+        modelo.load_weights('dnn/sigmoid-adam2.hdf5')
     elif activator == 'tanh':
         # load tanh-adam
-        modelo.load_weights('tanh-adam.hdf5')
+        modelo.load_weights('dnn/tanh-adam2.hdf5')
     else:
         print('error')
 elif optimizer == 'sgd':
     # compile with sgd
+    modelo.compile(loss='categorical_crossentropy',optimizer=optimizer)
     if activator == 'relu':
         # load relu-sgd
-        modelo.load_weights('relu-sgd.hdf5')
+        modelo.load_weights('dnn/relu-sgd2.hdf5')
     elif activator == 'sigmoid':
         # load sigmoid-sgd
-        modelo.load_weights('sigmoid-sgd.hdf5')
+        modelo.load_weights('dnn/sigmoid-sgd.hdf5')
     elif activator == 'tanh':
         # load tanh-sgd
-        modelo.load_weights('tanh-sgd.hdf5')
+        modelo.load_weights('dnn/tanh-sgd.hdf5')
 
 else: 
     print('error')
@@ -184,7 +185,7 @@ else:
 pred = modelo.predict(img_array)
 pred = np.argmax(pred)
 pred = class_labels[pred]
-print(pred)
+# print(pred)
 
 # Print out the classification
 print('dats a ',pred)

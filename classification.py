@@ -60,7 +60,7 @@ print('Source: ' + source)
 print('Activator: ' + activator)
 print('Optimizer: ' + optimizer)
 
-exit(0)
+# exit(0)
 
 ############# Classification Logic ##################
 
@@ -106,7 +106,7 @@ img = Image.open(source)
 img = img.resize((32, 32))
 img_array = np.asarray(img)
 img_array = img_array / 255
-input_shape = (32,32,3) #<<<<<<<< is this supposed to be a 4?
+input_shape = (32,32,3) 
 # input_shape = img_array.shape
 
 # reshape for model
@@ -119,23 +119,25 @@ modelo = Sequential()
 modelo.add(Conv2D(32, (3, 3), activation=activator, padding='same', input_shape=input_shape))
 modelo.add(Conv2D(32, (3, 3), activation=activator, padding='same'))
 modelo.add(Conv2D(32, (3, 3), activation=activator, padding='same'))
-modelo.add(MaxPooling2D((2, 2)))
+modelo.add(MaxPooling2D((3, 3)))
 modelo.add(Dropout(0.2))
 modelo.add(Conv2D(64, (3, 3), activation=activator, padding='same'))
 modelo.add(Conv2D(64, (3, 3), activation=activator, padding='same'))
 modelo.add(Conv2D(64, (3, 3), activation=activator, padding='same'))
-modelo.add(MaxPooling2D((2, 2)))
+modelo.add(MaxPooling2D((3, 3)))
 modelo.add(Dropout(0.2))
 modelo.add(Conv2D(128, (3, 3), activation=activator, padding='same'))
 modelo.add(Conv2D(128, (3, 3), activation=activator, padding='same'))
-modelo.add(MaxPooling2D((2, 2)))
+modelo.add(MaxPooling2D((3, 3)))
 modelo.add(Flatten())
 modelo.add(Dense(128, activation=activator))
 modelo.add(Dropout(0.2))
 modelo.add(Dense(10, activation='softmax'))
 
 modelo.compile(loss='categorical_crossentropy',optimizer=optimizer)
-modelo.load_weights('best_weights.hdf5')
+modelo.load_weights('dnn/relu-adam2.hdf5')
+print('MODEL SUCCESSFULLY LOADED\n\n\n')
+# print(modelo.summary())
 
 # validate the 'activator'
 pass
@@ -153,7 +155,7 @@ if optimizer == 'adam':
     # activator 
     if activator == 'relu':
         # load adam-relu
-        modelo.load_weights('dnn/relu-adam.hdf5')
+        modelo.load_weights('dnn/relu-adam2.hdf5')
     elif activator == 'sigmoid':
         # load sigmoid-adam
         modelo.load_weights('dnn/sigmoid-adam.hdf5')
@@ -179,7 +181,10 @@ else:
 
 # Get the classification
 
-# pred = modeo.predict()
+pred = modelo.predict(img_array)
+pred = np.argmax(pred)
+pred = class_labels[pred]
+print(pred)
 
 # Print out the classification
-print('dats a cat gro')
+print('dats a ',pred)

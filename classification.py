@@ -105,7 +105,7 @@ num_classes = 10
 # Image preprocessing
 # source = 'datcat.jpg'
 img = Image.open(source)
-img = img.resize((32, 32))
+img = img.resize((32, 32),filter=Image.ANTIALIAS)
 img.save('resized.jpg')
 img_array = np.asarray(img)
 img_array = img_array / 255

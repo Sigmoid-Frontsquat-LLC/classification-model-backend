@@ -5,10 +5,10 @@ const os = require("os");
 
 const port = process.env.PORT | 9000;
 
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
 
 // this is home...
-app.get("/", (req, res) => {
+app.post("/", (req, res) => {
     res.setHeader("content-type", "application/json");
     res.setHeader("server", os.hostname());
 
@@ -20,13 +20,21 @@ app.get("/", (req, res) => {
     res.status(response.code).send(JSON.stringify(response));
 });
 
-app.get("/classify", (req, res) => {
+// this should be a GET but .Net doesn't allow
+// a body to be streamed in an HTTP GET request
+// grrr...
+app.post("/classify", (req, res) => {
     const scheme = {
         activation: Joi.string().required(),
-        optimizer: Joi.string().required()
+        optimizer: Joi.string().required(),
+        image: Joi.string().optional()
     };
 
+    console.log("classify");
+
     const validatation = Joi.validate(req.body, scheme);
+
+    console.log("JOI Validation Complete");
 
     res.setHeader("content-type", "application/json");
 
@@ -56,7 +64,7 @@ app.get("/classify", (req, res) => {
             result.output = error;
             result.code = 400;
 
-            res.status(result.code).end(JSON.stringify(result));
+            res.status(400).end(JSON.stringify(result));
         });
 
         let output = "";
@@ -83,7 +91,7 @@ app.get("/classify", (req, res) => {
             code: 400
         };
 
-        res.status(response.code).end(JSON.stringify(response));
+        res.status(200).end(JSON.stringify(response));
     }
 });
 

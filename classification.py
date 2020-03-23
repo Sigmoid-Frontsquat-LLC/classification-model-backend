@@ -1,46 +1,4 @@
 import sys # this is for extracting command line arguments.
-import pandas as pd
-import io
-import requests
-import numpy as np
-import os
-import shutil
-from sklearn.model_selection import train_test_split
-from sklearn import metrics
-from skimage.transform import resize
-import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Activation, Conv2D, MaxPooling2D, Dropout, Flatten
-from tensorflow.keras.callbacks import EarlyStopping
-from tensorflow.keras.callbacks import ModelCheckpoint
-from tensorflow.keras.applications.vgg16 import VGG16
-from PIL import Image, ImageFile
-from matplotlib.pyplot import imshow
-import requests
-from io import BytesIO
-import matplotlib.image as mpimg
-import matplotlib.pyplot as plt
-
-
-# airplane : 0
-# automobile : 1
-# bird : 2
-# cat : 3
-# deer : 4
-# dog : 5
-# frog : 6
-# horse : 7
-# ship : 8
-# truck : 9
-
-class_labels = ['airplane','automobile','bird','cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
-num_classes = 10
-# input_shape = (32,32,3)
-
-
-
-
-
 
 def parse_activator(flag, value):
     if flag[1] == 'a':
@@ -67,7 +25,7 @@ optimizer = ''
 source = ''
 
 if len(sys.argv) == 1 or (len(sys.argv) - 1) % 2 != 0:
-    raise ValueError("Usage: -source [-a activator] [-o optimizer]")
+    raise ValueError("Usage: [-s image] [-a activator] [-o optimizer]")
 else:
     # could this be done better?
     # sure, but this works for now...
@@ -95,17 +53,54 @@ else:
     pass
 
 # naive check to ensure no argument is left unfilled
-if len(activator) == 0 or len(optimizer) == 0 or len(source) or 0:
-    raise ValueError("Usage: -source [-a activator] [-o optimizer]")
+if len(activator) == 0 or len(optimizer) == 0 or len(source) == 0 :
+    raise ValueError("Usage: [-s image] [-a activator] [-o optimizer]")
 
+############# Classification Logic ##################
 
+import pandas as pd
+import io
+import requests
+import numpy as np
+import os
+import shutil
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Activation, Conv2D, MaxPooling2D, Dropout, Flatten
+from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.applications.vgg16 import VGG16
+from PIL import Image, ImageFile
+from matplotlib.pyplot import imshow
+import requests
+from io import BytesIO
+import matplotlib.image as mpimg
+import matplotlib.pyplot as plt
+
+# airplane : 0
+# automobile : 1
+# bird : 2
+# cat : 3
+# deer : 4
+# dog : 5
+# frog : 6
+# horse : 7
+# ship : 8
+# truck : 9
+
+class_labels = ['airplane','automobile','bird','cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+num_classes = 10
+# input_shape = (32,32,3)
 
 # Image preprocessing
 source = 'datcat.jpg'
 img = Image.open(source)
+img = img.resize((32, 32))
 img_array = np.asarray(img)
-img_array = resize(img_array,(32,32,3),anti_aliasing=True)
-input_shape = (32,32,3)
+img_array = img_array / 255
+input_shape = (32,32,3) #<<<<<<<< is this supposed to be a 4?
 # input_shape = img_array.shape
 
 # reshape for model
@@ -113,13 +108,6 @@ input_shape = (32,32,3)
 # img_array = img_array.reshape((1,img_array.shape[0],img_array.shape[1],img_array.shape[3]))
 
 img_array = img_array.reshape((1,32,32,3))
-
-
-
-
-
-
-
 
 modelo = Sequential()
 modelo.add(Conv2D(32, (3, 3), activation=activator, padding='same', input_shape=input_shape))
@@ -140,22 +128,8 @@ modelo.add(Dense(128, activation=activator))
 modelo.add(Dropout(0.2))
 modelo.add(Dense(10, activation='softmax'))
 
-
 modelo.compile(loss='categorical_crossentropy',optimizer=optimizer)
 modelo.load_weights('best_weights.hdf5')
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # validate the 'activator'
 pass

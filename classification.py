@@ -193,32 +193,14 @@ else:
 
 
 
+############# classification output ##############
 pred = modelo.predict(img_array)
-
-# pred = np.argmax(pred)
-# pred = class_labels[pred]
-# print(pred)
-
-# Print out the classification
-
-x = dict(zip(class_labels, pred))
-print(x)
-
-
-
-
-
-
-
-
-
-############# worked before ##############
-
 classification = {k:v for k,v in zip(class_labels,pred[0])}
-print(classification)
-print('\n\n\n')
 pred_class = class_labels[np.argmax(pred)]
-print('dats a ',pred_class)
+
+# this is a diction with the class labels and probabilities 
+print(classification)
+
 
 
 

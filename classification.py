@@ -58,9 +58,6 @@ else:
 if len(activator) == 0 or len(optimizer) == 0 or len(source) == 0 :
     raise ValueError("Usage: [-s image] [-a activator] [-o optimizer]")
 
-print('Source: ' + source)
-print('Activator: ' + activator)
-print('Optimizer: ' + optimizer)
 
 # exit(0)
 
@@ -71,6 +68,8 @@ import io
 import requests
 import numpy as np
 import os
+import logging
+import json
 import shutil
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
@@ -86,6 +85,12 @@ import requests
 from io import BytesIO
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
+
+
+####### warning messages not printed #######
+logging.disable(logging.WARNING)
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
 
 
 # class labels are as follows for the cifar10
@@ -193,13 +198,56 @@ else:
 
 
 
-############# classification output ##############
+############# classification ##############
 pred = modelo.predict(img_array)
-classification = {k:v for k,v in zip(class_labels,pred[0])}
+pred = pred[0]
 pred_class = class_labels[np.argmax(pred)]
 
-# this is a diction with the class labels and probabilities 
+
+
+############# JSON ###############
+# classification = {k:v for k,v in zip(class_labels,pred)}
+classification = [
+    {
+        class_labels[0] : pred[0]
+    },
+    {
+        class_labels[1] : pred[1]
+    },
+    {
+        class_labels[2] : pred[2]
+    },
+    {
+        class_labels[3] : pred[3]
+    },
+    {
+        class_labels[4] : pred[4]
+    },
+    {
+        class_labels[5] : pred[5]
+    },
+    {
+        class_labels[6] : pred[6]
+    },
+    {
+        class_labels[7] : pred[7]
+    },
+    {
+        class_labels[8] : pred[8]
+    },
+    {
+        class_labels[9] : pred[9]
+    },
+]
+
+
+
+########## output ################
 print(classification)
+
+
+
+
 
 
 

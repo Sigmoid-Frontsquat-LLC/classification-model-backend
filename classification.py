@@ -87,6 +87,8 @@ from io import BytesIO
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 
+
+# class labels are as follows for the cifar10
 # airplane : 0
 # automobile : 1
 # bird : 2
@@ -97,13 +99,11 @@ import matplotlib.pyplot as plt
 # horse : 7
 # ship : 8
 # truck : 9
-
 class_labels = ['airplane','automobile','bird','cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
 num_classes = 10
-# input_shape = (32,32,3)
 
 # Image preprocessing
-# source = 'datcat.jpg'
+
 img = Image.open(source)
 img = img.resize((32,32))
 enhancer = ImageEnhance.Sharpness(img)
@@ -113,26 +113,15 @@ enhanced_im = enhancer.enhance(10.0)
 enhanced_im.save('resized.jpg')
 img_array = np.asarray(enhanced_im)
 img_array = img_array / 255
-print(img_array.shape)
+
 
 
 input_shape = (32,32,3)
 
-# img.save('resized.jpg')
-# img_array = np.asarray(img)
-# img_array = img_array / 255
-# input_shape = (32,32,3) 
 
-
-
-
-
-
-# input_shape = img_array.shape
 
 # reshape for model
 # original model was trained with (32,32,3) 
-# img_array = img_array.reshape((1,img_array.shape[0],img_array.shape[1],img_array.shape[3]))
 
 img_array = img_array.reshape((1,32,32,3))
 
@@ -156,9 +145,8 @@ modelo.add(Dropout(0.2))
 modelo.add(Dense(10, activation='softmax'))
 
 modelo.compile(loss='categorical_crossentropy',optimizer=optimizer)
-modelo.load_weights('dnn/relu-adam2.hdf5')
-print('MODEL SUCCESSFULLY LOADED\n\n\n')
-# print(modelo.summary())
+
+
 
 # validate the 'activator'
 pass
@@ -167,7 +155,6 @@ pass
 
 # Load weights based on activator and optimizer
 # probably not needed as we are already passing the optimizer as a variable 
-modelo.compile(loss='categorical_crossentropy',optimizer=optimizer)
 
 if optimizer == 'adam':
     # compile with adam 
@@ -207,16 +194,15 @@ else:
 
 
 pred = modelo.predict(img_array)
-# print(pred[0])
-# print(pred)
+
 # pred = np.argmax(pred)
 # pred = class_labels[pred]
 # print(pred)
 
 # Print out the classification
 
-# x = dict(zip(class_labels, pred))
-
+x = dict(zip(class_labels, pred))
+print(x)
 
 
 
